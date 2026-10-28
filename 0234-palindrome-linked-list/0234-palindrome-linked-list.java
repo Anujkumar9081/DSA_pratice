@@ -11,28 +11,35 @@
 class Solution {
     public boolean isPalindrome(ListNode head) {
 
-        ListNode curr = head;
-        ListNode prev = null;      // here the reversed stored 
-        int count = 0;
-        while(curr!=null){
-            ListNode newList = new ListNode(curr.val);
-
-            newList.next = prev;
-              prev = newList;
-            curr = curr.next;
-            count++;
-        }
-        
-       ListNode orginal  = head;
-       ListNode reversed = prev;
-
-       while(orginal!=null && reversed!=null){
-        if(orginal.val!=reversed.val){
-            return false;
-        }
-        orginal = orginal.next;
-        reversed = reversed.next;
+       ListNode slow  = head;
+       ListNode fast = head;
+       // find the middle one and fast.next!=null is for odd case and fast!=null is for even case
+       while(fast!=null && fast.next!=null){
+        slow = slow.next;
+        fast = fast.next.next;
        }
-       return true;
+
+        // reversed half one 
+       ListNode prev = null;
+       ListNode curr = slow;
+       while(curr!=null){
+        ListNode curr1 = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = curr1;
+       }
+
+       // compare first part and second part that is aready reversed 
+            ListNode first = head;
+            ListNode second = prev;
+
+            while(second!=null){
+                if(first.val!=second.val){
+                    return false;
+                }
+                first = first.next;
+                second = second.next;
+            }
+        return true;
     }
 }
